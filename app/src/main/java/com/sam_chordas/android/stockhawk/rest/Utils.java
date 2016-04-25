@@ -1,9 +1,16 @@
 package com.sam_chordas.android.stockhawk.rest;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.ContentProviderOperation;
+import android.content.Context;
 import android.util.Log;
+
+import com.sam_chordas.android.stockhawk.R;
 import com.sam_chordas.android.stockhawk.data.QuoteColumns;
 import com.sam_chordas.android.stockhawk.data.QuoteProvider;
+import com.sam_chordas.android.stockhawk.widget.StockWidgetProvider;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -115,7 +122,7 @@ public class Utils {
 
   public static ContentProviderOperation buildBatchOperation(JSONObject jsonObject){
     ContentProviderOperation.Builder builder = ContentProviderOperation.newInsert(
-        QuoteProvider.Quotes.CONTENT_URI);
+            QuoteProvider.Quotes.CONTENT_URI);
     try {
       String change = jsonObject.getString(YHD_CHANGE);
       builder.withValue(QuoteColumns.SYMBOL, jsonObject.getString(YHD_SYMBOL));
@@ -134,5 +141,12 @@ public class Utils {
       e.printStackTrace();
     }
     return builder.build();
+  }
+
+  public static void updateWidgets(Context context){
+    AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+    ComponentName component = new ComponentName(context, StockWidgetProvider.class);
+    int[] widgetIds = widgetManager.getAppWidgetIds(component);
+    widgetManager.notifyAppWidgetViewDataChanged(widgetIds, R.id.widget_list);
   }
 }
