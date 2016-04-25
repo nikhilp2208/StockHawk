@@ -15,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,6 +27,7 @@ import com.sam_chordas.android.stockhawk.data.QuoteColumns;
 import com.sam_chordas.android.stockhawk.data.QuoteProvider;
 import com.sam_chordas.android.stockhawk.rest.QuoteCursorAdapter;
 import com.sam_chordas.android.stockhawk.rest.RecyclerViewItemClickListener;
+import com.sam_chordas.android.stockhawk.rest.StockData;
 import com.sam_chordas.android.stockhawk.rest.Utils;
 import com.sam_chordas.android.stockhawk.service.StockIntentService;
 import com.sam_chordas.android.stockhawk.service.StockTaskService;
@@ -86,6 +88,13 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
               @Override public void onItemClick(View v, int position) {
                 //TODO:
                 // do something on item click
+                Cursor quoteCursor = mCursorAdapter.getCursor();
+                quoteCursor.moveToPosition(position);
+                StockData stockData = getStockData(quoteCursor);
+                Log.d("MSA", "on item click");
+                Intent intent = new Intent(mContext, StockDetailActivity.class);
+                intent.putExtra(getString(R.string.parcelable_stock_data),stockData);
+                mContext.startActivity(intent);
               }
             }));
     recyclerView.setAdapter(mCursorAdapter);
@@ -155,6 +164,15 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
     }
   }
 
+  private StockData getStockData(Cursor cursor) {
+    StockData stockData = new StockData();
+    stockData.symbol = cursor.getString(cursor.getColumnIndex(QuoteColumns.SYMBOL));
+    stockData.bidPrice = Float.parseFloat(cursor.getString(cursor.getColumnIndex(QuoteColumns.BIDPRICE)));
+    stockData.change = Float.parseFloat(cursor.getString(cursor.getColumnIndex(QuoteColumns.CHANGE)));
+    stockData.percentChange = cursor.getString(cursor.getColumnIndex(QuoteColumns.PERCENT_CHANGE));
+    stockData.isUp = cursor.getInt(cursor.getColumnIndex(QuoteColumns.ISUP));
+    return stockData;
+  }
 
   @Override
   public void onResume() {

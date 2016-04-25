@@ -5,6 +5,9 @@ import android.util.Log;
 import com.sam_chordas.android.stockhawk.data.QuoteColumns;
 import com.sam_chordas.android.stockhawk.data.QuoteProvider;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,6 +21,18 @@ public class Utils {
 
   public static boolean showPercent = true;
 
+  private static final String YHD_QUERY = "query";
+  private static final String YHD_COUNT = "count";
+  private static final String YHD_RESULTS = "results";
+  private static final String YHD_QUOTE = "quote";
+  private static final String YHD_DATE = "Date";
+  private static final String YHD_CLOSE = "Close";
+
+  private static final String YHD_CHANGE = "Change";
+  private static final String YHD_SYMBOL = "symbol";
+  private static final String YHD_BID = "Bid";
+  private static final String YHD_CHANGE_PERCENTAGE = "ChangeinPercent";
+
   public static ArrayList quoteJsonToContentVals(String JSON){
     ArrayList<ContentProviderOperation> batchOperations = new ArrayList<>();
     JSONObject jsonObject = null;
@@ -25,14 +40,14 @@ public class Utils {
     try{
       jsonObject = new JSONObject(JSON);
       if (jsonObject != null && jsonObject.length() != 0){
-        jsonObject = jsonObject.getJSONObject("query");
-        int count = Integer.parseInt(jsonObject.getString("count"));
+        jsonObject = jsonObject.getJSONObject(YHD_QUERY);
+        int count = Integer.parseInt(jsonObject.getString(YHD_COUNT));
         if (count == 1){
-          jsonObject = jsonObject.getJSONObject("results")
-              .getJSONObject("quote");
+          jsonObject = jsonObject.getJSONObject(YHD_RESULTS)
+              .getJSONObject(YHD_QUOTE);
           batchOperations.add(buildBatchOperation(jsonObject));
         } else{
-          resultsArray = jsonObject.getJSONObject("results").getJSONArray("quote");
+          resultsArray = jsonObject.getJSONObject(YHD_RESULTS).getJSONArray(YHD_QUOTE);
 
           if (resultsArray != null && resultsArray.length() != 0){
             for (int i = 0; i < resultsArray.length(); i++){
@@ -46,6 +61,32 @@ public class Utils {
       Log.e(LOG_TAG, "String to JSON failed: " + e);
     }
     return batchOperations;
+  }
+
+  public static Map<String,Float> historicalJsonToMap(String JSON) {
+
+    Map<String,Float> historicalData = new HashMap<String,Float>();
+
+    try {
+      JSONObject json = new JSONObject(JSON);
+
+      JSONObject queryJson = json.getJSONObject(YHD_QUERY);
+      JSONObject resultsJson = queryJson.getJSONObject(YHD_RESULTS);
+      JSONArray quoteJsonArray = resultsJson.getJSONArray(YHD_QUOTE);
+
+      for (int i = 0; i < quoteJsonArray.length() ; i++) {
+        JSONObject quoteJson = quoteJsonArray.getJSONObject(i);
+
+        String date = quoteJson.getString(YHD_DATE);
+        Float close = (float) quoteJson.getDouble(YHD_CLOSE);
+        historicalData.put(date,close);
+      }
+
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
+
+    return historicalData;
   }
 
   public static String truncateBidPrice(String bidPrice){
@@ -74,11 +115,11 @@ public class Utils {
     ContentProviderOperation.Builder builder = ContentProviderOperation.newInsert(
         QuoteProvider.Quotes.CONTENT_URI);
     try {
-      String change = jsonObject.getString("Change");
-      builder.withValue(QuoteColumns.SYMBOL, jsonObject.getString("symbol"));
-      builder.withValue(QuoteColumns.BIDPRICE, truncateBidPrice(jsonObject.getString("Bid")));
+      String change = jsonObject.getString(YHD_CHANGE);
+      builder.withValue(QuoteColumns.SYMBOL, jsonObject.getString(YHD_SYMBOL));
+      builder.withValue(QuoteColumns.BIDPRICE, truncateBidPrice(jsonObject.getString(YHD_BID)));
       builder.withValue(QuoteColumns.PERCENT_CHANGE, truncateChange(
-          jsonObject.getString("ChangeinPercent"), true));
+          jsonObject.getString(YHD_CHANGE_PERCENTAGE), true));
       builder.withValue(QuoteColumns.CHANGE, truncateChange(change, false));
       builder.withValue(QuoteColumns.ISCURRENT, 1);
       if (change.charAt(0) == '-'){

@@ -1,11 +1,13 @@
 package com.sam_chordas.android.stockhawk.rest;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import com.sam_chordas.android.stockhawk.data.QuoteColumns;
 import com.sam_chordas.android.stockhawk.data.QuoteProvider;
 import com.sam_chordas.android.stockhawk.touch_helper.ItemTouchHelperAdapter;
 import com.sam_chordas.android.stockhawk.touch_helper.ItemTouchHelperViewHolder;
+import com.sam_chordas.android.stockhawk.ui.StockDetailActivity;
 
 /**
  * Created by sam_chordas on 10/6/15.
@@ -24,7 +27,7 @@ import com.sam_chordas.android.stockhawk.touch_helper.ItemTouchHelperViewHolder;
  * for the code structure
  */
 public class QuoteCursorAdapter extends CursorRecyclerViewAdapter<QuoteCursorAdapter.ViewHolder>
-    implements ItemTouchHelperAdapter{
+    implements ItemTouchHelperAdapter, RecyclerViewItemClickListener.OnItemClickListener{
 
   private static Context mContext;
   private static Typeface robotoLight;
@@ -84,17 +87,28 @@ public class QuoteCursorAdapter extends CursorRecyclerViewAdapter<QuoteCursorAda
     return super.getItemCount();
   }
 
-  public static class ViewHolder extends RecyclerView.ViewHolder
+    @Override
+    public void onItemClick(View v, int position) {
+        Log.d("QCA","On item Clicked");
+    }
+
+
+    public static class ViewHolder extends RecyclerView.ViewHolder
       implements ItemTouchHelperViewHolder, View.OnClickListener{
     public final TextView symbol;
     public final TextView bidPrice;
     public final TextView change;
     public ViewHolder(View itemView){
       super(itemView);
+      itemView.setFocusable(true);
+      itemView.setClickable(true);
       symbol = (TextView) itemView.findViewById(R.id.stock_symbol);
+      symbol.setContentDescription(symbol.getText());
       symbol.setTypeface(robotoLight);
       bidPrice = (TextView) itemView.findViewById(R.id.bid_price);
+      bidPrice.setContentDescription(bidPrice.getText());
       change = (TextView) itemView.findViewById(R.id.change);
+      change.setContentDescription(change.getText());
     }
 
     @Override
@@ -109,7 +123,7 @@ public class QuoteCursorAdapter extends CursorRecyclerViewAdapter<QuoteCursorAda
 
     @Override
     public void onClick(View v) {
-
+        Log.d("QCA","On Clicked");
     }
   }
 }
