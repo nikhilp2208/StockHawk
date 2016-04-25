@@ -53,6 +53,7 @@ public class StockDetailActivityFragment extends Fragment {
     TextView mBidPriceTextView;
     TextView mChangeTextView;
     TextView mChangePercTextView;
+    TextView mFallbackTextView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -78,11 +79,18 @@ public class StockDetailActivityFragment extends Fragment {
         mChangePercTextView.setText(mStockData.percentChange);
         mChangePercTextView.setContentDescription(mStockData.percentChange);
 
+        mFallbackTextView = (TextView) view.findViewById(R.id.chart_fallback_text_view);
+
         new FetchStockHistoricalData().execute(mStockData.symbol);
         return view;
     }
 
     public void displayLineChart(LinkedHashMap<String,Float> graphData) {
+
+        if (!Utils.isNetworkAvailable(getActivity())) {
+            mFallbackTextView.setVisibility(View.VISIBLE);
+            return;
+        }
         Collection values = graphData.values();
         Integer maxVal = ((Float) Collections.max(values)).intValue();
         Integer minVal = ((Float) Collections.min(values)).intValue();

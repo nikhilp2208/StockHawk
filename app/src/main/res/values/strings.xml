@@ -18,6 +18,7 @@
   <string name="detail_change" translatable="true">CHANGE :</string>
   <string name="detail_change_perc" translatable="true">CHANGE%:</string>
   <string name="stock_graph_description" translatable="true">Stock price graph over last 7 days</string>
-  <string name="empty_stock_list" translatable="false">No Stock information available</string>
+  <string name="empty_stock_list" translatable="true">No Stock information available</string>
+  <string name="empty_graph_text" translatable="true">Graph cannot be loaded. No internet connection</string>
   <string name="intent_symbol_string" translatable="false">symbol</string>
 </resources>

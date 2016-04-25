@@ -4,11 +4,15 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.ContentProviderOperation;
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.sam_chordas.android.stockhawk.R;
 import com.sam_chordas.android.stockhawk.data.QuoteColumns;
 import com.sam_chordas.android.stockhawk.data.QuoteProvider;
+import com.sam_chordas.android.stockhawk.exceptions.InvalidStockException;
 import com.sam_chordas.android.stockhawk.widget.StockWidgetProvider;
 
 import java.util.ArrayList;
@@ -16,6 +20,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,7 +47,7 @@ public class Utils {
   private static final String YHD_BID = "Bid";
   private static final String YHD_CHANGE_PERCENTAGE = "ChangeinPercent";
 
-  public static ArrayList quoteJsonToContentVals(String JSON){
+  public static ArrayList quoteJsonToContentVals(String JSON) throws InvalidStockException {
     ArrayList<ContentProviderOperation> batchOperations = new ArrayList<>();
     JSONObject jsonObject = null;
     JSONArray resultsArray = null;
@@ -54,6 +59,9 @@ public class Utils {
         if (count == 1){
           jsonObject = jsonObject.getJSONObject(YHD_RESULTS)
               .getJSONObject(YHD_QUOTE);
+          if ("null"==jsonObject.getString(YHD_BID)) {
+            throw new InvalidStockException();
+          }
           batchOperations.add(buildBatchOperation(jsonObject));
         } else{
           resultsArray = jsonObject.getJSONObject(YHD_RESULTS).getJSONArray(YHD_QUOTE);
@@ -148,5 +156,12 @@ public class Utils {
     ComponentName component = new ComponentName(context, StockWidgetProvider.class);
     int[] widgetIds = widgetManager.getAppWidgetIds(component);
     widgetManager.notifyAppWidgetViewDataChanged(widgetIds, R.id.widget_list);
+  }
+
+  public static boolean isNetworkAvailable(Context context) {
+    ConnectivityManager connectivityManager
+            = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+    return activeNetworkInfo != null && activeNetworkInfo.isConnected();
   }
 }

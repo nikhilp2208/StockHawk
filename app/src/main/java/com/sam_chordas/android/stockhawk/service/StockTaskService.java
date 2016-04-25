@@ -5,14 +5,20 @@ import android.content.Context;
 import android.content.OperationApplicationException;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.RemoteException;
 import android.util.Log;
+import android.widget.Toast;
+
 import com.google.android.gms.gcm.GcmNetworkManager;
 import com.google.android.gms.gcm.GcmTaskService;
 import com.google.android.gms.gcm.TaskParams;
 import com.sam_chordas.android.stockhawk.data.QuoteColumns;
 import com.sam_chordas.android.stockhawk.data.QuoteProvider;
+import com.sam_chordas.android.stockhawk.exceptions.InvalidStockException;
 import com.sam_chordas.android.stockhawk.rest.Utils;
+import com.sam_chordas.android.stockhawk.ui.MyStocksActivity;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -26,6 +32,8 @@ import java.net.URLEncoder;
  * and is used for the initialization and adding task as well.
  */
 public class StockTaskService extends GcmTaskService{
+
+  Handler mMainThreadHandler = null;
   private String LOG_TAG = StockTaskService.class.getSimpleName();
 
   private OkHttpClient client = new OkHttpClient();
@@ -33,10 +41,13 @@ public class StockTaskService extends GcmTaskService{
   private StringBuilder mStoredSymbols = new StringBuilder();
   private boolean isUpdate;
 
-  public StockTaskService(){}
+  public StockTaskService(){
+    mMainThreadHandler = new Handler();
+  }
 
   public StockTaskService(Context context){
     mContext = context;
+    mMainThreadHandler = new Handler();
   }
   String fetchData(String url) throws IOException{
     Request request = new Request.Builder()
@@ -125,6 +136,18 @@ public class StockTaskService extends GcmTaskService{
               Utils.quoteJsonToContentVals(getResponse));
         }catch (RemoteException | OperationApplicationException e){
           Log.e(LOG_TAG, "Error applying batch insert", e);
+        } catch (InvalidStockException e) {
+          e.printStackTrace();
+
+          Handler h = new Handler(mContext.getMainLooper());
+
+          h.post(new Runnable() {
+            @Override
+            public void run() {
+              Toast.makeText(mContext, "Stock doesn't exist", Toast.LENGTH_LONG).show();
+            }
+          });
+
         }
       } catch (IOException e){
         e.printStackTrace();
@@ -133,5 +156,4 @@ public class StockTaskService extends GcmTaskService{
 
     return result;
   }
-
 }
