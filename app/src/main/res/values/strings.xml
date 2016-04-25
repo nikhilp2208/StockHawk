@@ -13,4 +13,9 @@
   <string name="title_activity_stock_detail">StockDetailActivity</string>
   <string name="add_stock_button_description">Add Stock</string>
   <string name="parcelable_stock_data" translatable="false">stock_data</string>
+  <string name="detail_stock" translatable="true">Stock</string>
+  <string name="detail_bid_price" translatable="true">BID PRICE:</string>
+  <string name="detail_change" translatable="true">CHANGE :</string>
+  <string name="detail_change_perc" translatable="true">CHANGE%:</string>
+  <string name="stock_graph_description" translatable="true">Stock price graph over last 7 days</string>
 </resources>

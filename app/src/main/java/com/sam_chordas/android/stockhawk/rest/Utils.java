@@ -5,7 +5,9 @@ import android.util.Log;
 import com.sam_chordas.android.stockhawk.data.QuoteColumns;
 import com.sam_chordas.android.stockhawk.data.QuoteProvider;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.json.JSONArray;
@@ -63,9 +65,9 @@ public class Utils {
     return batchOperations;
   }
 
-  public static Map<String,Float> historicalJsonToMap(String JSON) {
+  public static LinkedHashMap<String,Float> historicalJsonToMap(String JSON) {
 
-    Map<String,Float> historicalData = new HashMap<String,Float>();
+    LinkedHashMap<String,Float> historicalData = new LinkedHashMap<String,Float>();
 
     try {
       JSONObject json = new JSONObject(JSON);
@@ -74,7 +76,7 @@ public class Utils {
       JSONObject resultsJson = queryJson.getJSONObject(YHD_RESULTS);
       JSONArray quoteJsonArray = resultsJson.getJSONArray(YHD_QUOTE);
 
-      for (int i = 0; i < quoteJsonArray.length() ; i++) {
+      for (int i = (quoteJsonArray.length()-1); i >=0 ; i--) {
         JSONObject quoteJson = quoteJsonArray.getJSONObject(i);
 
         String date = quoteJson.getString(YHD_DATE);
