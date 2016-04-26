@@ -14,14 +14,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/CardView.Dark"
-        android:layout_margin="12dp">
+        android:layout_margin="@dimen/card_view_layout_margin">
 
     <com.db.chart.view.LineChartView
         xmlns:chart="http://schemas.android.com/apk/res-auto"
         android:id="@+id/linechart"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_margin="10dp"
+        android:layout_height="@dimen/chart_view_layout_height"
+        android:layout_margin="@dimen/chart_view_layout_margin"
         chart:chart_axisColor="@android:color/secondary_text_dark"
         chart:chart_labelColor="@android:color/secondary_text_dark"
         android:contentDescription="@string/stock_graph_description"/>
@@ -40,13 +40,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/CardView.Dark"
-        android:layout_margin="12dp">
+        android:layout_margin="@dimen/card_view_layout_margin">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:divider="@android:drawable/divider_horizontal_dark"
-            android:layout_margin="10dp">
+            android:layout_margin="@dimen/detail_stock_linear_layout_margin">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"

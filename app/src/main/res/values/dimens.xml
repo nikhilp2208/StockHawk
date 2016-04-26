@@ -11,4 +11,21 @@
     <dimen name="widget_detail_default_height">180dp</dimen>
     <dimen name="widget_detail_min_resize_width">220dp</dimen>
     <dimen name="widget_detail_min_resize_height">@dimen/widget_detail_default_height</dimen>
+
+    <dimen name="fab_layout_margin">16dp</dimen>
+
+    <dimen name="card_view_layout_margin">12dp</dimen>
+
+    <dimen name="chart_view_layout_margin">10dp</dimen>
+    <dimen name="chart_view_layout_height">100dp</dimen>
+
+    <dimen name="detail_stock_linear_layout_margin">10dp</dimen>
+
+    <dimen name="list_quote_layout_start_padding">16dp</dimen>
+    <dimen name="list_quote_layout_end_padding">16dp</dimen>
+
+    <dimen name="bid_price_text_view_end_padding">10sp</dimen>
+
+    <dimen name="change_text_view_start_padding">3dp</dimen>
+    <dimen name="change_text_view_end_padding">3dp</dimen>
 </resources>

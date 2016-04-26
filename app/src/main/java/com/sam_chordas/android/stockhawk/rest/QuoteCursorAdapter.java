@@ -89,7 +89,6 @@ public class QuoteCursorAdapter extends CursorRecyclerViewAdapter<QuoteCursorAda
 
     @Override
     public void onItemClick(View v, int position) {
-        Log.d("QCA","On item Clicked");
     }
 
 
@@ -123,7 +122,6 @@ public class QuoteCursorAdapter extends CursorRecyclerViewAdapter<QuoteCursorAda
 
     @Override
     public void onClick(View v) {
-        Log.d("QCA","On Clicked");
     }
   }
 }

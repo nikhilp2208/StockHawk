@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.google.android.gms.gcm.GcmNetworkManager;
 import com.google.android.gms.gcm.GcmTaskService;
 import com.google.android.gms.gcm.TaskParams;
+import com.sam_chordas.android.stockhawk.R;
 import com.sam_chordas.android.stockhawk.data.QuoteColumns;
 import com.sam_chordas.android.stockhawk.data.QuoteProvider;
 import com.sam_chordas.android.stockhawk.exceptions.InvalidStockException;
@@ -144,7 +145,7 @@ public class StockTaskService extends GcmTaskService{
           h.post(new Runnable() {
             @Override
             public void run() {
-              Toast.makeText(mContext, "Stock doesn't exist", Toast.LENGTH_LONG).show();
+              Toast.makeText(mContext, mContext.getString(R.string.stock_not_exists_toast), Toast.LENGTH_LONG).show();
             }
           });
 

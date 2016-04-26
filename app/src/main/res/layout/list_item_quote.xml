@@ -5,10 +5,10 @@
     android:layout_height="72dp"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp"
+    android:paddingLeft="@dimen/list_quote_layout_start_padding"
+    android:paddingRight="@dimen/list_quote_layout_end_padding"
+    android:paddingStart="@dimen/list_quote_layout_start_padding"
+    android:paddingEnd="@dimen/list_quote_layout_end_padding"
     android:clickable="true"
     >
   <TextView
@@ -30,8 +30,8 @@
         style="@style/BidPriceTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingRight="10sp"
-        android:paddingEnd="10sp"
+        android:paddingRight="@dimen/bid_price_text_view_end_padding"
+        android:paddingEnd="@dimen/bid_price_text_view_end_padding"
         tools:text="1000.00"
         />
     <TextView
@@ -40,10 +40,10 @@
         style="@style/PercentChangeTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="3dp"
-        android:paddingRight="3dp"
-        android:paddingStart="3dp"
-        android:paddingEnd="3dp"
+        android:paddingLeft="@dimen/change_text_view_start_padding"
+        android:paddingRight="@dimen/change_text_view_end_padding"
+        android:paddingStart="@dimen/change_text_view_start_padding"
+        android:paddingEnd="@dimen/change_text_view_end_padding"
         tools:text="100%"
         />
   </LinearLayout>

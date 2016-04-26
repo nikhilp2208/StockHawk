@@ -91,7 +91,6 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                 Cursor quoteCursor = mCursorAdapter.getCursor();
                 quoteCursor.moveToPosition(position);
                 StockData stockData = getStockData(quoteCursor);
-                Log.d("MSA", "on item click");
                 Intent intent = new Intent(mContext, StockDetailActivity.class);
                 intent.putExtra(getString(R.string.parcelable_stock_data),stockData);
                 mContext.startActivity(intent);
@@ -117,7 +116,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                       new String[] { input.toString() }, null);
                   if (c.getCount() != 0) {
                     Toast toast =
-                        Toast.makeText(MyStocksActivity.this, "This stock is already saved!",
+                        Toast.makeText(MyStocksActivity.this, getString(R.string.stock_already_saved_toast),
                             Toast.LENGTH_LONG);
                     toast.setGravity(Gravity.CENTER, Gravity.CENTER, 0);
                     toast.show();
